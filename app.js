@@ -40,7 +40,7 @@ UserSchema.plugin(mongooseAuth, {
   }
 });
 mongoose.model('AuthUser', UserSchema);
-mongoose.connect('mongodb://localhost/tabout');
+mongoose.connect('mongodb://tabout:tabout@staff.mongohq.com:10036/tabout');
 AuthUser = mongoose.model('AuthUser');
 
 var Troupe = require('./lib/Troupe');
