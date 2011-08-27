@@ -25,7 +25,7 @@ var mongooseAuth = require('mongoose-auth');
 UserSchema.plugin(mongooseAuth, {
   everymodule: {
     everyauth: {
-      User: function () {
+      AuthUser: function () {
         return AuthUser;
       }
     }
