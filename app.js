@@ -4,29 +4,66 @@
  */
 
 var nko = require('nko')('jhAZ+nTFXbf2PrWJ');
+var config = require('./config');
 var express = require('express');
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore;
 var redis = require('redis');
 var userDB = redis.createClient();
+var everyauth = require('everyauth')
+  , Promise = everyauth.Promise;
+everyauth.debug = true;
+var mongoose = require('mongoose')
+  , Schema = mongoose.Schema
+  , ObjectId = mongoose.SchemaTypes.ObjectId;
+
+var UserSchema = new Schema({})
+  , AuthUser;
+
+var mongooseAuth = require('mongoose-auth');
+
+UserSchema.plugin(mongooseAuth, {
+  everymodule: {
+    everyauth: {
+      User: function () {
+        return AuthUser;
+      }
+    }
+  }
+, twitter: {
+    everyauth: {
+      myHostname: 'http://localhost:3000'
+      , consumerKey: config.auth.twitter.consumerKey
+      , consumerSecret: config.auth.twitter.consumerSecret
+      , redirectPath: '/'
+    }
+  }
+});
+mongoose.model('AuthUser', UserSchema);
+mongoose.connect('mongodb://localhost/tabout');
+AuthUser = mongoose.model('AuthUser');
+
 var Troupe = require('./lib/Troupe');
 var User = require('./lib/User');
 
-var app = module.exports = express.createServer();
+var app = module.exports = express.createServer(
+  express.bodyParser(),
+  express.static(__dirname + '/public'),
+  express.cookieParser(),
+  //express.session({ secret: 'test'}),
+  express.session({secret: 'himitsu!', fingerprint: function(req){return req.socket.remoteAddress;}, store: sessionStore, key: 'express.sid'}),
+  mongooseAuth.middleware(),
+  //app.use(express.methodOverride());
+  express.compiler({ src: __dirname + '/public', enable: ['less'] }),
+  //app.use(app.router);
+  express.logger({ format: ':method :url' })
+);
 
 // Configuration
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.use(express.cookieParser());
-  app.use(express.session({secret: 'himitsu!', fingerprint: function(req){return req.socket.remoteAddress;}, store: sessionStore, key: 'express.sid'}));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
-  app.use(express.logger({ format: ':method :url' }));
 });
 
 app.configure('development', function(){
@@ -303,5 +340,6 @@ io.sockets.on('connecttion', function(socket){
   });
 });
 
+mongooseAuth.helpExpress(app);
 app.listen(process.env.NODE_ENV === 'production' ? 80 : 3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
