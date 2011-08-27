@@ -5,15 +5,7 @@
 
 var nko = require('nko')('jhAZ+nTFXbf2PrWJ');
 var config = require('./config');
-var winston = require('winston');
-var logger = new (winston.Logger)({
-  transports: [
-    new winston.transports.File({ filename: 'log/all-logs.log' })
-  ],
-  exceptionHandlers: [
-    new winston.transports.File({ filename: 'log/exceptions.log' })
-  ]
-});
+var Log = require('log');
 var express = require('express');
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore;
@@ -55,6 +47,7 @@ AuthUser = mongoose.model('AuthUser');
 var Troupe = require('./lib/Troupe');
 var User = require('./lib/User');
 
+var log = new Log(Log.DEBUG, fs.createWriteStream('./logs/log.log'));
 var app = module.exports = express.createServer(
   express.bodyParser(),
   express.static(__dirname + '/public'),
@@ -92,6 +85,10 @@ userDB.on('error', function (err) {
 
 app.get('/', function(req, res){
   res.render('atsuya_test', {layout: false});
+});
+
+process.on('uncaughtException', function(err) {
+  log.error(err);
 });
 
 mongooseAuth.helpExpress(app);
