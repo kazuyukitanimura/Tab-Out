@@ -5,14 +5,6 @@
 
 var nko = require('nko')('jhAZ+nTFXbf2PrWJ');
 var config = require('./config');
-var logger = new (winston.Logger)({
-  transports: [
-    new winston.transports.File({ filename: 'log/all-logs.log' })
-  ]
-  exceptionHandlers: [
-    new winston.transports.File({ filename: 'log/exceptions.log' })
-  ]
-});
 var express = require('express');
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore;
