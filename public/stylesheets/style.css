@@ -1,10 +1,12 @@
-body {
-  padding: 0px 50px 50px 50px;
+.ui-page {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-image: url(/images/bg.png);
   color: #333;
   text-rendering: optimizeLegibility;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.35);
+}
+div#index {
+  padding: 0px 50px 50px 50px;
 }
 h1 {
   line-height: 100px;

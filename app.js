@@ -6,6 +6,7 @@
 var nko = require('nko')('jhAZ+nTFXbf2PrWJ');
 var express = require('express');
 var RedisStore = require('connect-redis')(express);
+var sessionStore = new RedisStore;
 var redis = require('redis');
 var userDB = redis.createClient();
 var Troupe = require('./lib/Troupe');
@@ -19,7 +20,7 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.cookieParser());
-  app.use(express.session({secret: 'himitsu!', fingerprint: function(req){return req.socket.remoteAddress;}, store: new RedisStore, key: 'express.sid'}));
+  app.use(express.session({secret: 'himitsu!', fingerprint: function(req){return req.socket.remoteAddress;}, store: sessionStore, key: 'express.sid'}));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
@@ -86,215 +87,221 @@ app.get('/', function(req, res){
   });
 });
 
-app.get('/login/:userID/:userPW', function(req, res){
-  res.contentType('application/json');
-  var params = req.params;
-  var userID = params.userID;
-  var userPW = params.userPW;
-  if(userID && userPW){
-    userDB.hgetall(userID, function(err, obj){
+var io = require('socket.io').listen(app);
+// Based on http://www.danielbaulig.de/socket-ioexpress/
+io.set('authorization', function (data, accept){
+  if(data.headers.cookie){
+    var parseCookie = require('connect').utils.parseCookie;
+    data.cookie = parseCookie(data.headers.cookie);
+    data.sessionID = data.cookie['express.sid'];
+    // save the session store to the data object 
+    // (as required by the Session constructor)
+    data.sessionStore = sessionStore;
+    sessionStore.get(data.sessionID, function (err, session){
       if(err){
-        console.error(err);
-        res.send(JSON.stringify({status:'fail', message:'DB error'}), 500);
-        res.end();
-        req.session.destroy();
-      }else if(! (obj.userPW===userPW && obj.data)){
-        res.send(JSON.stringify({status:'fail', message:'no data or wrong userPW'}), 500);
-        res.end();
-        req.session.destroy();
+        accept(err.message, false);
       }else{
-        req.session.regenerate(function(err){
-          if(err){
-            console.error(err);
-            res.send(JSON.stringify({status:'fail', message:'session regenerate error'}), 500);
-            res.end();
-            req.session.destroy();
-          }else{
-            req.session.data = JSON.parse(obj.data);
-            req.session.userID = userID;
-            res.end(JSON.stringify({status:'success'}));
-          }
-        });
+        // create a session object, passing data as request and our
+        // just acquired session data
+        var Session = require('connect').middleware.session.Session;
+        data.session = new Session(data, session);
+        accept(null, true);
       }
     });
-  }else{
-    res.send(JSON.stringify({status:'fail', message:'no such a userID or userPW'}), 400);
-    res.end();
+  } else {
+    return accept('No cookie transmitted.', false);
   }
 });
 
-app.get('/logout', function(req, res){
-  res.contentType('application/json');
-  var session = req.session;
-  var userID = session.userID;
-  var data = session.data;
-  if(data && userID){
-    userDB.hset(userID, 'data', JSON.stringify(data), function(err){
-      if(err){
-        console.error(err);
-        res.send(JSON.stringify({status:'fail', message:'DB error'}), 500);
-        res.end();
-      }else{
-        req.session.destroy(function(err){
-          if(err){
-            console.error(err);
-            res.send(JSON.stringify({status:'fail', message:'session destroy error'}), 500);
-            res.end();
-          }else{
-            res.end(JSON.stringify({status:'success'}));
-          }
-        });
-      }
-    });
-  }else{
-    res.send(JSON.stringify({status:'fail', message:'no such a data or userID'}), 400);
-    res.end();
-  }
-});
+io.sockets.on('connecttion', function(socket){
+  // Based on http://www.danielbaulig.de/socket-ioexpress/
+  var hs = client.handshake;
+  var session = hs.session;
+  var sessionID = hs.sessionID;
+  console.log('A client with sessionID '+sessionID+' connected!');
+  // setup an inteval that will keep our session fresh
 
-app.get('/signup/:userID/:userPW', function(req, res){
-  res.contentType('application/json');
-  var params = req.params;
-  var userID = params.userID;
-  var userPW = params.userPW;
-  var data = {};
-  if(userID && userPW){
-    userDB.hexists(userID, 'userPW', function(err, obj){
-      if(err){
-        console.error(err);
-        res.send(JSON.stringify({status:'fail', message:'DB error'}), 500);
-        res.end();
-      }else if(obj===1){
-        res.send(JSON.stringify({status:'fail', message:'the account already exists'}), 400);
-        res.end();
-      }else if(obj===0){
-        userDB.hmset(userID, 'userPW', userPW, 'data', JSON.stringify(data), 'history', JSON.stringify([]), function(err){
-          if(err){
-            console.error(err);
-            res.send(JSON.stringify({status:'fail', message:'userPW DB error'}), 500);
-            res.end();
-          }else{
-            req.session.regenerate(function(err){
-              if(err){
-                console.error(err);
-                res.send(JSON.stringify({status:'fail', message:'session regenerate error'}), 500);
-                res.end();
-                req.session.destroy();
-              }else{
-                req.session.userID = userID;
-                req.session.data = data;
-                res.end(JSON.stringify({status:'success'}));
-              }
-            });
-          }
-        });
-      }else{
-        console.error(err);
-        res.send(JSON.stringify({status:'fail', message:'unknown error'}), 500);
-        res.end();
-      }
-    });
-  }else{
-    res.send(JSON.stringify({status:'fail', message:'invalid userID or userPW'}), 400);
-    res.end();
-  }
-});
+  socket.on('signup', function(data){
+    var username         = data.username;
+    var password         = data.password;
+    var first_name       = data.first_name;
+    var last_name        = data.last_name;
+    var twitter_username = data.twitter_username;
+    var email            = data.email;
+    if(username && password && first_name && last_name && email){
+      userDB.hexists(username, 'password', function(err, obj){
+        if(err){
+          console.error(err);
+          socket.emit('fail', {action:'signup', message:'DB error'});
+        }else if(obj===1){
+          socket.emit('fail', {action:'signup', message:'the account already exists'});
+        }else if(obj===0){
+          userDB.hset(username, 'password', password, function(err){
+            if(err){
+              console.error(err);
+              socket.emit('fail', {action:'signup', message:'DB error'});
+            }else{
+              session.regenerate(function(err){
+                if(err){
+                  console.error(err);
+                  socket.emit('fail', {action:'signup', message:'session error'});
+                  session.destroy();
+                }else{
+                  socket.emit('success', {action:'login', message:''});
+                  session.username = username;
+                }
+              });
+            }
+          });
+        }else{
+          console.error(err);
+          socket.emit('fail', {action:'signup', message:'unknown error'});
+        }
+      });
+    }else{
+      socket.emit('fail', {action:'login', message:'some info is missing'});
+    }
+  });
 
-app.get('/signdown/:userPW', function(req, res){
-  res.contentType('application/json');
-  var params = req.params;
-  var userPW = params.userPW;
-  var session = req.session;
-  var userID = session.userID;
-  if(userID && userPW){
-    userDB.hget(userID, 'userPW', function(err, obj){
-      if(err){
-        console.error(err);
-        res.send(JSON.stringify({status:'fail', message:'DB error'}), 500);
-        res.end();
-      }else if(obj!==userPW){
-        res.send(JSON.stringify({status:'fail', message:'invalid password'}), 400);
-        res.end();
-      }else if(obj===userPW){
-        userDB.del(userID, function(err){
-          if(err){
-            console.error(err);
-            res.send(JSON.stringify({status:'fail', message:'userPW DB error'}), 500);
-            res.end();
-          }else{
-            req.session.destroy(function(err){
-              if(err){
-                console.error(err);
-                res.send(JSON.stringify({status:'fail', message:'session destroy error'}), 500);
-                res.end();
-              }else{
-                res.end(JSON.stringify({status:'success'}));
-              }
-            });
-          }
-        });
-      }else{
-        console.error(err);
-        res.send(JSON.stringify({status:'fail', message:'the account does not exist?'}), 400);
-        res.end();
-      }
-    });
-  }else{
-    res.send(JSON.stringify({status:'fail', message:'invalid userID or userPW'}), 400);
-    res.end();
-  }
-});
+  socket.on('signdown', function(data){
+    var password = data.password;
+    var username = session.username;
+    if(username && password){
+      userDB.hget(username, 'password', function(err, obj){
+        if(err){
+          console.error(err);
+          socket.emit('fail', {action:'signdown', message:'DB error'});
+        }else if(obj !== password){
+          socket.emit('fail', {action:'signdown', message:'invalid password'});
+        }else if(obj === password){
+          userDB.del(username, function(err){
+            if(err){
+              console.error(err);
+              socket.emit('fail', {action:'signdown', message:'DB error'});
+            }else{
+              session.destroy(function(err){
+                if(err){
+                  console.error(err);
+                  socket.emit('fail', {action:'signdown', message:'session error'});
+                }else{
+                  socket.emit('success', {action:'signdown', message:''});
+                }
+              });
+            }
+          });
+        }else{
+          console.error(err);
+          socket.emit('fail', {action:'signdown', message:'the account does not exist?'});
+        }
+      });
+    }else{
+      socket.emit('fail', {action:'signdown', message:'not logged-in or blank password'});
+    }
+  });
 
-app.get('/chpw/:oldPW/:newPW', function(req, res){
-  res.contentType('application/json');
-  var params = req.params;
-  var oldPW = params.oldPW;
-  var newPW = params.newPW;
-  var session = req.session;
-  var userID = session.userID;
-  var data = session.data;
-  if(userID && oldPW && newPW){
-    userDB.hget(userID, 'userPW', function(err, obj){
-      if(err){
-        console.error(err);
-        res.send(JSON.stringify({status:'fail', message:'DB error'}), 500);
-        res.end();
-      }else if(obj!==oldPW){
-        res.send(JSON.stringify({status:'fail', message:'invalid password'}), 400);
-        res.end();
-      }else if(obj===oldPW){
-        userDB.hmset(userID, 'userPW', newPW, 'data', JSON.stringify(data), function(err){
-          if(err){
-            console.error(err);
-            res.send(JSON.stringify({status:'fail', message:'userPW DB error'}), 500);
-            res.end();
-          }else{
-            req.session.regenerate(function(err){
-              if(err){
-                console.error(err);
-                res.send(JSON.stringify({status:'fail', message:'session regenerate error'}), 500);
-                res.end();
-                req.session.destroy();
-              }else{
-                req.session.userID = userID;
-                req.session.data = data;
-                res.end(JSON.stringify({status:'success'}));
-              }
-            });
-          }
-        });
-      }else{
-        console.error(err);
-        res.send(JSON.stringify({status:'fail', message:'the account does not exist?'}), 400);
-        res.end();
-      }
-    });
-  }else{
-    res.send(JSON.stringify({status:'fail', message:'invalid userID, old password, new passord'}), 400);
-    res.end();
-  }
-});
+  socket.on('login', function(data){
+    var username = data.username;
+    var password = data.password;
+    if(username && password){
+      userDB.hgetall(username, function(err, obj){
+        if(err){
+          console.error(err);
+          socket.emit('fail', {action:'login', message:'DB error'});
+          session.destroy();
+        }else if(obj.password !== password){
+          socket.emit('fail', {action:'login', message:'Wrong password'});
+          session.destroy();
+        }else{
+          session.regenerate(function(err){
+            if(err){
+              console.error(err);
+              socket.emit('fail', {action:'login', message:'session error'});
+              session.destroy();
+            }else{
+              socket.emit('success', {action:'login', message:''});
+              session.username = username;
+            }
+          });
+        }
+      });
+    }else{
+      socket.emit('fail', {action:'login', message:'missing username or password'});
+    }
+  });
 
+  socket.on('logout', function(data){
+    var username = session.username;
+    if(username){
+      session.destroy(function(err){
+        if(err){
+          console.error(err);
+          socket.emit('fail', {action:'logout', message:'session error'});
+        }else{
+          socket.emit('success', {action:'login', message:''});
+        }
+      });
+    }else{
+      socket.emit('fail', {action:'logout', message:'not logged-in'});
+    }
+  });
+
+  socket.on('chpw', function(data){
+    var password = data.password;
+    var new_password = data.new_password;
+    var username = session.username;
+    if(username && password && new_password){
+      userDB.hget(username, 'password', function(err, obj){
+        if(err){
+          console.error(err);
+          socket.emit('fail', {action:'chpw', message:'DB error'});
+        }else if(obj !== password){
+          socket.emit('fail', {action:'chpw', message:'invalid password'});
+        }else if(obj === password){
+          userDB.mset(username, 'password', password, function(err){
+            if(err){
+              console.error(err);
+              socket.emit('fail', {action:'chpw', message:'DB error'});
+            }else{
+              session.regenerate(function(err){
+                if(err){
+                  console.error(err);
+                  socket.emit('fail', {action:'chpw', message:'session error'});
+                  req.session.destroy();
+                }else{
+                  socket.emit('success', {action:'chpw', message:''});
+                  session.username = username;
+                }
+              });
+            }
+          });
+        }else{
+          console.error(err);
+          socket.emit('fail', {action:'chpw', message:'the account does not exist?'});
+        }
+      });
+    }else{
+      socket.emit('fail', {action:'chpw', message:'missing info?'});
+    }
+  });
+
+  // Based on http://www.danielbaulig.de/socket-ioexpress/
+  var intervalID = setInterval(function(){
+    // reload the session (just in case something changed,
+    // we don't want to override anything, but the age)
+    // reloading will also ensure we keep an up2date copy
+    // of the session with our connection.
+    session.reload(function(){ 
+      // "touch" it (resetting maxAge and lastAccess)
+      // and save it back again.
+      session.touch().save();
+    });
+  }, 60*1000);
+  client.on('disconnect', function(){
+    console.log('A client with sessionID '+sessionID+' disconnected!');
+    // clear the client interval to stop refreshing the session
+    clearInterval(intervalID);
+  });
+});
 
 app.listen(process.env.NODE_ENV === 'production' ? 80 : 3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
