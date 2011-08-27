@@ -5,8 +5,9 @@
 
 var nko = require('nko')('jhAZ+nTFXbf2PrWJ');
 var express = require('express');
-var MemoryStore = express.session.MemoryStore;
-var sessionStore = new MemoryStore({ reapInterval: 60000 * 10 });
+var RedisStore = require('connect-redis')(express);
+var redis = require('redis');
+var userDB = redis.createClient();
 var Troupe = require('./lib/Troupe');
 var User = require('./lib/User');
 
@@ -18,7 +19,7 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.cookieParser());
-  app.use(express.session({secret: 'himitsu!', fingerprint: function(req){return req.socket.remoteAddress;}, store: sessionStore, key: 'express.sid'}));
+  app.use(express.session({secret: 'himitsu!', fingerprint: function(req){return req.socket.remoteAddress;}, store: new RedisStore, key: 'express.sid'}));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
@@ -33,6 +34,10 @@ app.configure('development', function(){
 
 app.configure('production', function(){
   app.use(express.errorHandler()); 
+});
+
+userDB.on('error', function (err) {
+  console.log('Redis connection error to ' + userDB.host + ':' + userDB.port + ' - ' + err);
 });
 
 // Routes
