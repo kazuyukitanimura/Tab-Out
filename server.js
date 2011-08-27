@@ -7,5 +7,5 @@ var app = http.createServer(function (req, res) {
         res.end('Hello, World');
         });
 
-        app.listen(parseInt(process.env.PORT) || 7777);
+        app.listen(parseInt(process.env.PORT) || 80);
         console.log('Listening on ' + app.address().port);
