@@ -4,14 +4,18 @@
   "description": "easy way to log and split bills with your friends",
   "version": "0.0.0",
   "repository": {
-    "url": ""
+    "url": "http://http://69.164.214.192/"
   },
   "main": "app.js",
   "engines": {
-    "node": "~v0.4.11"
+    "node": ">= v0.4.11"
   },
   "dependencies": {
     "nko": "~0.1.0"
+  , "express": ">= 2.4.3"
+  , "jade": ">= 0.14.1"
+  , "less": ">= 1.1.4"
+  , "should": ">= 0.2.1"
   },
   "devDependencies": {}
 }
