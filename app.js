@@ -91,7 +91,7 @@ userDB.on('error', function (err) {
 // Routes
 
 app.get('/', function(req, res){
-  render('atsuya_test');
+  res.render('atsuya_test', {layout: false});
 });
 
 mongooseAuth.helpExpress(app);
