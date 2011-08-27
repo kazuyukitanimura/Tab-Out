@@ -86,5 +86,215 @@ app.get('/', function(req, res){
   });
 });
 
+app.get('/login/:userID/:userPW', function(req, res){
+  res.contentType('application/json');
+  var params = req.params;
+  var userID = params.userID;
+  var userPW = params.userPW;
+  if(userID && userPW){
+    userDB.hgetall(userID, function(err, obj){
+      if(err){
+        console.error(err);
+        res.send(JSON.stringify({status:'fail', message:'DB error'}), 500);
+        res.end();
+        req.session.destroy();
+      }else if(! (obj.userPW===userPW && obj.data)){
+        res.send(JSON.stringify({status:'fail', message:'no data or wrong userPW'}), 500);
+        res.end();
+        req.session.destroy();
+      }else{
+        req.session.regenerate(function(err){
+          if(err){
+            console.error(err);
+            res.send(JSON.stringify({status:'fail', message:'session regenerate error'}), 500);
+            res.end();
+            req.session.destroy();
+          }else{
+            req.session.data = JSON.parse(obj.data);
+            req.session.userID = userID;
+            res.end(JSON.stringify({status:'success'}));
+          }
+        });
+      }
+    });
+  }else{
+    res.send(JSON.stringify({status:'fail', message:'no such a userID or userPW'}), 400);
+    res.end();
+  }
+});
+
+app.get('/logout', function(req, res){
+  res.contentType('application/json');
+  var session = req.session;
+  var userID = session.userID;
+  var data = session.data;
+  if(data && userID){
+    userDB.hset(userID, 'data', JSON.stringify(data), function(err){
+      if(err){
+        console.error(err);
+        res.send(JSON.stringify({status:'fail', message:'DB error'}), 500);
+        res.end();
+      }else{
+        req.session.destroy(function(err){
+          if(err){
+            console.error(err);
+            res.send(JSON.stringify({status:'fail', message:'session destroy error'}), 500);
+            res.end();
+          }else{
+            res.end(JSON.stringify({status:'success'}));
+          }
+        });
+      }
+    });
+  }else{
+    res.send(JSON.stringify({status:'fail', message:'no such a data or userID'}), 400);
+    res.end();
+  }
+});
+
+app.get('/signup/:userID/:userPW', function(req, res){
+  res.contentType('application/json');
+  var params = req.params;
+  var userID = params.userID;
+  var userPW = params.userPW;
+  var data = {};
+  if(userID && userPW){
+    userDB.hexists(userID, 'userPW', function(err, obj){
+      if(err){
+        console.error(err);
+        res.send(JSON.stringify({status:'fail', message:'DB error'}), 500);
+        res.end();
+      }else if(obj===1){
+        res.send(JSON.stringify({status:'fail', message:'the account already exists'}), 400);
+        res.end();
+      }else if(obj===0){
+        userDB.hmset(userID, 'userPW', userPW, 'data', JSON.stringify(data), 'history', JSON.stringify([]), function(err){
+          if(err){
+            console.error(err);
+            res.send(JSON.stringify({status:'fail', message:'userPW DB error'}), 500);
+            res.end();
+          }else{
+            req.session.regenerate(function(err){
+              if(err){
+                console.error(err);
+                res.send(JSON.stringify({status:'fail', message:'session regenerate error'}), 500);
+                res.end();
+                req.session.destroy();
+              }else{
+                req.session.userID = userID;
+                req.session.data = data;
+                res.end(JSON.stringify({status:'success'}));
+              }
+            });
+          }
+        });
+      }else{
+        console.error(err);
+        res.send(JSON.stringify({status:'fail', message:'unknown error'}), 500);
+        res.end();
+      }
+    });
+  }else{
+    res.send(JSON.stringify({status:'fail', message:'invalid userID or userPW'}), 400);
+    res.end();
+  }
+});
+
+app.get('/signdown/:userPW', function(req, res){
+  res.contentType('application/json');
+  var params = req.params;
+  var userPW = params.userPW;
+  var session = req.session;
+  var userID = session.userID;
+  if(userID && userPW){
+    userDB.hget(userID, 'userPW', function(err, obj){
+      if(err){
+        console.error(err);
+        res.send(JSON.stringify({status:'fail', message:'DB error'}), 500);
+        res.end();
+      }else if(obj!==userPW){
+        res.send(JSON.stringify({status:'fail', message:'invalid password'}), 400);
+        res.end();
+      }else if(obj===userPW){
+        userDB.del(userID, function(err){
+          if(err){
+            console.error(err);
+            res.send(JSON.stringify({status:'fail', message:'userPW DB error'}), 500);
+            res.end();
+          }else{
+            req.session.destroy(function(err){
+              if(err){
+                console.error(err);
+                res.send(JSON.stringify({status:'fail', message:'session destroy error'}), 500);
+                res.end();
+              }else{
+                res.end(JSON.stringify({status:'success'}));
+              }
+            });
+          }
+        });
+      }else{
+        console.error(err);
+        res.send(JSON.stringify({status:'fail', message:'the account does not exist?'}), 400);
+        res.end();
+      }
+    });
+  }else{
+    res.send(JSON.stringify({status:'fail', message:'invalid userID or userPW'}), 400);
+    res.end();
+  }
+});
+
+app.get('/chpw/:oldPW/:newPW', function(req, res){
+  res.contentType('application/json');
+  var params = req.params;
+  var oldPW = params.oldPW;
+  var newPW = params.newPW;
+  var session = req.session;
+  var userID = session.userID;
+  var data = session.data;
+  if(userID && oldPW && newPW){
+    userDB.hget(userID, 'userPW', function(err, obj){
+      if(err){
+        console.error(err);
+        res.send(JSON.stringify({status:'fail', message:'DB error'}), 500);
+        res.end();
+      }else if(obj!==oldPW){
+        res.send(JSON.stringify({status:'fail', message:'invalid password'}), 400);
+        res.end();
+      }else if(obj===oldPW){
+        userDB.hmset(userID, 'userPW', newPW, 'data', JSON.stringify(data), function(err){
+          if(err){
+            console.error(err);
+            res.send(JSON.stringify({status:'fail', message:'userPW DB error'}), 500);
+            res.end();
+          }else{
+            req.session.regenerate(function(err){
+              if(err){
+                console.error(err);
+                res.send(JSON.stringify({status:'fail', message:'session regenerate error'}), 500);
+                res.end();
+                req.session.destroy();
+              }else{
+                req.session.userID = userID;
+                req.session.data = data;
+                res.end(JSON.stringify({status:'success'}));
+              }
+            });
+          }
+        });
+      }else{
+        console.error(err);
+        res.send(JSON.stringify({status:'fail', message:'the account does not exist?'}), 400);
+        res.end();
+      }
+    });
+  }else{
+    res.send(JSON.stringify({status:'fail', message:'invalid userID, old password, new passord'}), 400);
+    res.end();
+  }
+});
+
+
 app.listen(process.env.NODE_ENV === 'production' ? 80 : 3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
