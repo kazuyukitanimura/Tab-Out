@@ -35,7 +35,7 @@ UserSchema.plugin(mongooseAuth, {
       myHostname: 'http://69.164.214.192'
       , consumerKey: config.auth.twitter.consumerKey
       , consumerSecret: config.auth.twitter.consumerSecret
-      , callbackPath : '/custom/twitter/callback/path'
+      , callbackPath : '/auth/twitter/callback/path'
       , redirectPath: '/'
     }
   }
