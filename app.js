@@ -59,8 +59,8 @@ var app = module.exports = express.createServer(
   express.bodyParser(),
   express.static(__dirname + '/public'),
   express.cookieParser(),
-  //express.session({ secret: 'test'}),
-  express.session({secret: 'himitsu!', fingerprint: function(req){return req.socket.remoteAddress;}, store: sessionStore, key: 'express.sid'}),
+  express.session({ secret: 'test'}),
+  //express.session({secret: 'himitsu!', fingerprint: function(req){return req.socket.remoteAddress;}, store: sessionStore, key: 'express.sid'}),
   mongooseAuth.middleware(),
   //express.router(routes),
   //app.use(express.methodOverride());
