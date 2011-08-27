@@ -32,7 +32,7 @@ UserSchema.plugin(mongooseAuth, {
   }
 , twitter: {
     everyauth: {
-      myHostname: 'http://localhost:3000'
+      myHostname: 'http://69.164.214.192'
       , consumerKey: config.auth.twitter.consumerKey
       , consumerSecret: config.auth.twitter.consumerSecret
       , redirectPath: '/'
