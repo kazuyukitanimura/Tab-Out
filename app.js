@@ -62,7 +62,8 @@ var app = module.exports = express.createServer(
   express.bodyParser(),
   express.static(__dirname + '/public'),
   express.cookieParser(),
-  express.session({secret: config.session.secret, store: new RedisStore}),
+  express.session({secret: config.session.secret}),
+  //express.session({secret: config.session.secret, store: new RedisStore}),
   mongooseAuth.middleware(),
   express.compiler({ src: __dirname + '/public', enable: ['less'] }),
   express.logger({ format: ':method :url' })
