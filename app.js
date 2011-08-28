@@ -9,7 +9,6 @@ var config = require('./config');
 var Log = require('log');
 var express = require('express');
 var RedisStore = require('connect-redis')(express);
-var sessionStore = new RedisStore;
 var redis = require('redis');
 var userDB = redis.createClient();
 var everyauth = require('everyauth')
@@ -63,13 +62,9 @@ var app = module.exports = express.createServer(
   express.bodyParser(),
   express.static(__dirname + '/public'),
   express.cookieParser(),
-  express.session({ secret: config.session.secret}),
-  //express.session({secret: 'himitsu!', fingerprint: function(req){return req.socket.remoteAddress;}, store: sessionStore, key: 'express.sid'}),
+  express.session({secret: config.session.secret, store: new RedisStore}),
   mongooseAuth.middleware(),
-  //express.router(routes),
-  //app.use(express.methodOverride());
   express.compiler({ src: __dirname + '/public', enable: ['less'] }),
-  //app.use(app.router);
   express.logger({ format: ':method :url' })
 );
 
