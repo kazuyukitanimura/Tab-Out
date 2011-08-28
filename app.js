@@ -186,13 +186,61 @@ app.get('/login', function(req, res) {
 
 app.get('/users/:user_id/groups', checkAuthenticated, function(req, res) {
   Group.find({users: {$elemMatch : {id: req.params.user_id}}}, function(err, docs) {
-    res.send(JSON.stringify(docs), {'ContentType': 'application/json'}, 200)
+    res.send(JSON.stringify(docs), {'ContentType': 'application/json'}, 200);
   });
+});
+
+app.get('/groups/create', checkAuthenticated, function(req, res) {
+  var group_name = req.param('name') || null;
+  if (group_name) {
+    var group = new Group();
+    group.name = group_name;
+    group.save(function(err) {
+      if (err) {
+        res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
+      } else {
+        res.send(JSON.stringify(group), {'ContentType': 'application/json'}, 200);
+      }
+    });
+  } else {
+    res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
+  }
+});
+
+app.get('/groups/delete', checkAuthenticated, function(req, res) {
+  var group_id = req.param('group_id') || null;
+  if (group_id) {
+    Group.remove({_id: group_id}, function(err) {
+      var code = err ? 400 : 200;
+      res.send(JSON.stringify({}), {'ContentType': 'application/json'}, code);
+    });
+  } else {
+    res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
+  }
+});
+
+app.get('/groups/update', checkAuthenticated, function(req, res) {
+  var group_id = req.param('group_id') || null;
+  var group_name = req.param('name') || null;
+  if (group_id) {
+    Group.findById(group_id, function(err, doc) {
+      if (!err) {
+        if (group_name) {
+          doc.name = group_name;
+        }
+        doc.save(function(err) {
+          res.send(JSON.stringify(doc), {'ContentType': 'application/json'}, 200);
+        });
+      } else {
+        res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
+      }
+    });
+  }
 });
 
 app.get('/groups/:group_id', checkAuthenticated, function(req, res) {
   Group.findById(req.params.group_id, function(err, doc) {
-    res.send(JSON.stringify(doc), {'ContentType': 'application/json'}, 200)
+    res.send(JSON.stringify(doc), {'ContentType': 'application/json'}, 200);
   });
 });
 
@@ -201,7 +249,7 @@ app.get('/groups/:group_id/users/delete', checkAuthenticated, function(req, res)
   if (user_id) {
     Group.findById(req.params.group_id, function(err, doc) {
       if (err) {
-        res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400)
+        res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
       } else {
         var users = [];
         for(var i = 0; i < doc.users.length; i++) {
@@ -213,15 +261,15 @@ app.get('/groups/:group_id/users/delete', checkAuthenticated, function(req, res)
         doc.users = users;
         doc.save(function(err) {
           if (err) {
-            res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400)
+            res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
           } else {
-            res.send(JSON.stringify(doc), {'ContentType': 'application/json'}, 200)
+            res.send(JSON.stringify(doc), {'ContentType': 'application/json'}, 200);
           }
         });
       }
     });
   } else {
-    res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400)
+    res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
   }
 });
 
@@ -233,7 +281,7 @@ app.get('/groups/:group_id/users/add', checkAuthenticated, function(req, res) {
   if (user_id && user_name && user_amount) {
     Group.findById(req.params.group_id, function(err, doc) {
       if (err) {
-        res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400)
+        res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
       } else {
         var exists = false;
         for(var i = 0; i < doc.users.length; i++) {
@@ -247,15 +295,15 @@ app.get('/groups/:group_id/users/add', checkAuthenticated, function(req, res) {
         }
         doc.save(function(err) {
           if (err) {
-            res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400)
+            res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
           } else {
-            res.send(JSON.stringify(doc), {'ContentType': 'application/json'}, 200)
+            res.send(JSON.stringify(doc), {'ContentType': 'application/json'}, 200);
           }
         });
       }
     });
   } else {
-    res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400)
+    res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
   }
 });
 
@@ -268,7 +316,7 @@ app.get('/groups/:group_id/users/update', checkAuthenticated, function(req, res)
   if (user_user_id) {
     Group.findById(req.params.group_id, function(err, doc) {
       if (err) {
-        res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400)
+        res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
       } else {
         var users = [];
         for(var i = 0; i < doc.users.length; i++) {
@@ -290,22 +338,22 @@ app.get('/groups/:group_id/users/update', checkAuthenticated, function(req, res)
         doc.save(function(err) {
           if (err) {
             console.log(err);
-            res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400)
+            res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
           } else {
-            res.send(JSON.stringify(doc), {'ContentType': 'application/json'}, 200)
+            res.send(JSON.stringify(doc), {'ContentType': 'application/json'}, 200);
           }
         });
       }
     });
   } else {
-    res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400)
+    res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
   }
 });
 
 app.get('/groups/:group_id/tabout', checkAuthenticated, function(req, res) {
   Group.findById(req.params.group_id, function(err, doc) {
     if (err) {
-      res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400)
+      res.send(JSON.stringify({}), {'ContentType': 'application/json'}, 400);
     } else {
       var users = [];
       var expenses = [];
