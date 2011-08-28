@@ -1,24 +1,26 @@
  $(document).ready(function() {
 	
 	/* Display existing groups */
+	if(myId) {
+		var groupUrl = "/users/"+myId+"/groups";
 	
-	var groupUrl = "/users/"+myId+"/groups";
-	
-	$.getJSON(groupUrl, function(r) {
+		$.getJSON(groupUrl, function(r) {
 
-		for (var i=0; i<r.length; i++) {
-			var id = r[i]._id;
-			var name = r[i].name;
-			var url = r[i].url;
-			$("#tabGroupList").append("<li id='"+id+"'><a href=' "+ url +" '>" + name + "</a></li>");
-		}
-	});
+			for (var i=0; i<r.length; i++) {
+				var id = r[i]._id;
+				var name = r[i].name;
+				var url = r[i].url;
+				$("#tabGroupList").append("<li id='"+id+"'><a href=' "+ url +" '>" + name + "</a></li>");
+			}
+		});
+	}
 
 	
 	/* "About" Modal */
-	$("#about").click(function(e) {
+	$("#about").click(function (e) {
 		e.preventDefault();
 		
+		console.log("about");
 		openDialog();
 		
 		$('.close-dialog-button').click(function (e) {
