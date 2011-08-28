@@ -20,7 +20,7 @@
   <iframe src="http://nodeknockout.com/iframe/asuka?css=https://raw.github.com/gist/1176774/e336c0efd7c6d78fa1f49fda2f5e813ab747f580/vote_nko_css.css" frameborder="0" scrolling="no" allowtransparency="true" width="115" height="25"></iframe>
 	
 	<header class="main">
-	    <h2>Tab-Out</h2>
+	    <h2><a href="/">Tab-Out</a></h2>
       <div class="username">Hello, <%= everyauth.user.twit.name %>! <img src="<%= everyauth.user.twit.profileImageUrl %>"/></div>
 	</header>
 
@@ -44,7 +44,7 @@
 			<form action="#"> 
 				<label for="name">Group Name:</label>
 				<input id="groupname" type="text" name="groupname" value="" placeholder="Road Trip" /> 
-				<input type="submit" id="createGroupButton" value="Create">
+				<input type="button" id="createGroupButton" value="Create Name">
 				<div id="errorMessage"></id>
 			</form>
 		</div>
@@ -57,6 +57,7 @@
 		<div id="addPeople" style="display:none">
 			<div id="memberInputs">
 			</div>
+			<input type="button" id="finalizeGroupButton" value="Go To The Group">
 		</div>
 		
 	</section>

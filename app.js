@@ -64,7 +64,7 @@ var log = new Log(Log.DEBUG, fs.createWriteStream('./log/log.log'));
 
 var sessionConfig = {secret: config.session.secret};
 if (process.env.NODE_ENV === 'production') {
-  sessionConfig['store'] = new RedisStore;
+  //sessionConfig['store'] = new RedisStore;
 }
 var app = module.exports = express.createServer(
   express.bodyParser(),
@@ -246,8 +246,18 @@ app.get('/groups/update', checkAuthenticated, function(req, res) {
 });
 
 app.get('/groups/:group_id', checkAuthenticated, function(req, res) {
+  console.log('aaaaa');
+  /*
   Group.findById(req.params.group_id, function(err, doc) {
-    res.json(doc, 200);
+    res.json(doc, 200);i
+  });
+  */
+  res.render('amount', {group_id: req.params.group_id});
+});
+
+app.get('/groups/:group_id/users', checkAuthenticated, function(req, res) {
+  Group.findById(req.params.group_id, function(err, doc) {
+    res.json(doc, 200);i
   });
 });
 
@@ -413,6 +423,9 @@ app.get('/groups/:group_id/tabout', checkAuthenticated, function(req, res) {
       res.json(ot.troupTable, 200);
     }
   });
+});
+
+app.get('/amount', checkAuthenticated, function(req, res){
 });
 
 process.on('uncaughtException', function(err) {

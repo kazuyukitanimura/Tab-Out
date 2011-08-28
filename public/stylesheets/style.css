@@ -27,6 +27,13 @@ a:hover {
 	text-decoration: underline;
 }
 
+h2 a {
+	color: #fff;
+}
+h2 a:hover {
+	text-decoration: none;
+}
+
 /* Header */
 header h1,
 header h2 {

@@ -1,11 +1,10 @@
  $(document).ready(function() {
 	
 	/* Display existing groups */
-	console.log("---- "+myId);
+	
 	var groupUrl = "/users/"+myId+"/groups";
-	$('#tabGroup').load(groupUrl);
-
-    $.getJSON(groupUrl, function(r) {
+	
+	$.getJSON(groupUrl, function(r) {
 
 		for (var i=0; i<r.length; i++) {
 			var id = r[i]._id;
@@ -15,8 +14,6 @@
 		}
 	});
 
-
-	//$("#tabGroupList").html(myId);
 	
 	/* "About" Modal */
 	$("#about").click(function(e) {
@@ -43,12 +40,10 @@
 				console.log("Success creating a group!");
 				var groupId = r._id;
 				console.log(groupId);
+				$("#createGroupButton").val("Created");
+				$("#createGroupButton").attr("disabled", "true");
                	addMember(groupId);
-            },
-			error: function (e) {
-				console.log("Error creating a group!"+e);
-				$("errorMessage").html("Error. Try again.");
-			}
+            }
         });		
 
 	});
@@ -71,34 +66,45 @@
 				// display fields
 				for (var i=1; i<=num; i++) {
 				
-					$('#memberInputs').append('<div class="number-input"><input type="text" name="addMember'+i+'" placeholder="Twitter ID or Email" /> <input type="submit" id="addMember'+i+'" value="Add"></div>');
+					$('#memberInputs').append('<div class="number-input"><input type="text" name="member'+i+'" placeholder="Twitter ID or Email" /> <input type="button" id="addMemberButton'+i+'" value="Add"></div>');
 				}
+				
 				$("#addPeople").css("display","block");
 			
 				$('input[id^="addMemberButton"]').click(function (e) {
-					var buttonID = this.id;
+					
 					var twitterId = $('input[name^="member"]').val();
 					var url = "/groups/"+groupId+"/users/add";
 					var data = "id="+twitterId+"&name="+twitterId+"&amount=0";
 					console.log(data);
-					console.log(buttonID.value);
+					console.log($("#"+this.id));
+					console.log($("#"+this.id).val());
+				
+					var thisButton = $("#"+this.id);
 				
 				// add each person
 				 $.ajax({
 			            url: url,
 			            data: data,
 			            success: function () {
-			               	//buttonID.val("Added!");
-							//buttonID.attr("disabled", "true");
+			               	thisButton.val("Added");
+							thisButton.attr("disabled", "true");
 
 							console.log("Success adding a member!");
 			            }
 			     });
+			
+				// go to the created group page
+				$("#finalizeGroupButton").click(function () {
+					window.location.href ="/groups/"+groupId;
+				});
+				
+				
 			});
 		});
 	});
 	}
-	
+
 	function openDialog () {
 		// Scrim
 		var scrimHeight = $(document).height();
