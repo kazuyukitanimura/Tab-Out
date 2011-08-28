@@ -1,4 +1,3 @@
-
 div#index(data-role='page')
   h1= title
 
@@ -99,6 +98,11 @@ div#index(data-role='page')
         td $#{opt[users[3].user_id][users[3].user_id]/100}
 
     p  &copy; 2011 asuka
+
+    - if (!everyauth.loggedIn)
+      h1 UNKO
+    - else
+      h1 NO UNKO
 
 div#signup(data-role='page')
   div(data-role='header', data-theme='c')

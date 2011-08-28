@@ -1,41 +1,71 @@
-.ui-page {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-image: url(/images/bg.png);
-  color: #333;
-  text-rendering: optimizeLegibility;
-  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.35);
+html {
+	color: #fff;
+	background: #222;
+	background-image: -webkit-gradient(radial,
+                            50% 0, 10,
+                            50% 0, 400,
+                            from(rgba(255, 255, 255, 0.3)),
+                            to(rgba(255, 255, 255, 0))
+							);
+	background-image: -moz-radial-gradient(
+							top center,
+							circle, 
+							rgba(255, 255, 255, 0.3) 0%, 
+							rgba(255, 255, 255, 0) 50%
+							);
+    background-repeat: no-repeat;
+	min-height: 600px;
 }
-div#index {
-  padding: 0px 50px 50px 50px;
-}
-h1 {
-  line-height: 100px;
-  font: 40px Helvetica, sans-serif;
-  font-weight: bold;
+body {
+	font-family: 'Helvetica Neue', Helvetica, arial, sans-serif;
 }
 a {
-  color: #00B7FF;
+	color: #f281b5;
+	text-decoration: none;
 }
-table {
-  color: #333;
-  border-collapse: collapse;
-  box-shadow: 0px 1px 2px #555;
+a:hover {
+	text-decoration: underline;
 }
-table td {
-  border-width: 1px;
-  padding: 8px;
-  border-style: solid;
-  border-color: #ccc;
-  background-color: #fff;
+
+header h1 {
+  	font-family: 'Bevan', sans-serif;
+	font-weight: bold;
+	font-size: 6em;
+	text-shadow: rgba(255,255,255, .7) 0px 0px 10px;
+	margin: .5em auto 0;
 }
-.legend {
-  background: -webkit-linear-gradient(90deg, #e7e7e7, #f7f7f7);
+header,
+.auth {
+	text-align: center;
 }
-input {
-  width: 48px;
-  margin: 0px 4px;
-  border-style: none;
-  border-width: 0px;
-  box-shadow: -1px -1px 1px #555555;
-  font-size: 16px;
+.auth {
+	margin-top: 10em;
+}
+
+/* Modal Dialog */
+
+.scrim {
+  	position: absolute;
+	left: 0;
+	top: 0;
+  	z-index: 10;
+  	background-color: rgba(0,0,0,0.6);
+  	display: none;
+}
+   
+.dialog {
+  	position: absolute;
+	left: 0;
+	top: 0;
+  	width: 500px;
+  	height: 300px;
+	border-radius: 10px;
+  	display: none;
+  	z-index: 20;
+  	padding: 1em;
+	background-color: #eaeaea;
+}
+.close-dialog-button {
+	position: absolute;
+	right: 1em;
 }
