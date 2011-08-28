@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<!--
+  Tab-Out by Asuka for Node Knockout 2011
+-->
+
+<head>
+	<title>Tab-Out</title>
+	<meta charset='utf-8'>
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
+	<script src="/javascripts/scripts.js"></script>
+  <script src="/javascripts/amount.js"></script>
+	<link href="http://fonts.googleapis.com/css?family=Bevan&subset=latin" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
+  <script>
+    var groupId = '<%= group_id %>';
+  </script>
+</head>
+
+<body>
+	
+	<header class="main">
+	    <h2>Tab-Out</h2>
+      <div class="username">Hello, <%= everyauth.user.twit.name %>! <img src="<%= everyauth.user.twit.profileImageUrl %>"/></div>
+	</header>
+
+    <section id="yourGroup">
+		<h3>Your Group</h3>
+	
+    <div id="groupUsers">
+    </div>
+
+    <div id="tabout">
+    </div>
+		
+	</section>
+	
+	<footer>
+		
+	</footer>
+</body>
+</html>
