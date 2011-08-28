@@ -131,7 +131,9 @@ input[type="button"], input[type="submit"] {
 	border:0;
 	margin-top: 1em;
 }
-
+input[disabled="disabled"]{
+	opacity: .5;
+}
 .number-input {
 	margin: .5em 0;
 }
