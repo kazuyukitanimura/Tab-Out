@@ -12,6 +12,7 @@
   <script src="/javascripts/amount.js"></script>
 	<link href="http://fonts.googleapis.com/css?family=Bevan&subset=latin" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
+  <link rel="stylesheet" href="/stylesheets/amount.css" type="text/css">
   <script>
     var groupId = '<%= group_id %>';
   </script>
@@ -21,7 +22,7 @@
 	
 	<header class="main">
 	    <h2>Tab-Out</h2>
-      <div class="username">Hello, <%= everyauth.user.twit.name %>! <img src="<%= everyauth.user.twit.profileImageUrl %>"/></div>
+      <div class="username">Hello, <a href="/"><%= everyauth.user.twit.name %></a>! <img src="<%= everyauth.user.twit.profileImageUrl %>"/></div>
 	</header>
 
     <section id="yourGroup">
@@ -29,6 +30,9 @@
 	
     <div id="groupUsers">
     </div>
+    </section>
+    <section id="yourGroup">
+    <h3>This is How You Should Pay!</h3>
 
     <div id="tabout">
     </div>
