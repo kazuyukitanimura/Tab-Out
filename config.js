@@ -1,6 +1,6 @@
 module.exports = {
   server: {
-    host: 'http://localhost:3000',
+    host: 'localhost:3000',
   },
   session: {
     secret: 'taboutmotherfucker'
