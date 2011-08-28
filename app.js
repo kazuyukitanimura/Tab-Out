@@ -2,8 +2,9 @@
 /**
  * Module dependencies.
  */
-
 var nko = require('nko')('jhAZ+nTFXbf2PrWJ');
+
+var fs = require('fs');
 var config = require('./config');
 var Log = require('log');
 var express = require('express');
