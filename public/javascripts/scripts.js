@@ -64,21 +64,26 @@
 				$('#memberInputs').empty();
 				
 				// display fields
-				for (var i=1; i<=num; i++) {
-				
-					$('#memberInputs').append('<div class="number-input"><input type="text" name="member'+i+'" placeholder="Twitter ID or Email" /> <input type="button" id="addMemberButton'+i+'" value="Add"></div>');
+				for (var i=0; i<num; i++) {
+					var inputValue = (i === 0) ? myId : "";
+					
+					$('#memberInputs').append('<div class="number-input"><input type="text" value="'+inputValue+'" name="member'+i+'" placeholder="Twitter ID or Email" class="addMemberButton'+i+'input" /> <input type="button" id="addMemberButton'+i+'" value="Add"></div>');
 				}
 				
 				$("#addPeople").css("display","block");
 			
 				$('input[id^="addMemberButton"]').click(function (e) {
 					
-					var twitterId = $('input[name^="member"]').val();
+					console.log($("#"+this.id));
+					console.log(this.id);
+					
+					//var twitterId = $('input[name^="member"]').val();
+					var twitterId = $("."+this.id+"input").val();
+					console.log(twitterId);
+					
 					var url = "/groups/"+groupId+"/users/add";
 					var data = "id="+twitterId+"&name="+twitterId+"&amount=0";
 					console.log(data);
-					console.log($("#"+this.id));
-					console.log($("#"+this.id).val());
 				
 					var thisButton = $("#"+this.id);
 				
