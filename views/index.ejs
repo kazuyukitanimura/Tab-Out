@@ -17,10 +17,10 @@
 	
 	<header class="main">
 	    <h2>Tab-Out</h2>
-      <div class="username">Hello, <span id="twitter-user"><%= everyauth.user.twit.name %></span>!</div>
+      <div class="username">Hello, <%= everyauth.user.twit.name %>! <img src="<%= everyauth.user.twit.profileImageUrl %>"/></div>
 	</header>
 
-    <section id="createGroup">
+    <section id="yourGroup">
 		<h3>Your Group</h3>
 		
 		<div id="groups">
@@ -37,26 +37,34 @@
 	<section id="createGroup">
 		<h3>Create a new group</h3>
 		
-		<form action="#"> 
-			<label for="name">Group Name:</label>
-			<input type="text" name="group-name" value="" placeholder="Road Trip" />
-			<button id="createGroupButton">Create</button>
-		</form>
+		<div id="createGroupname">
+			<form action="#"> 
+				<label for="name">Group Name:</label>
+				<input id="groupname" type="text" name="groupname" value="" placeholder="Road Trip" />
+			</form>
+			
+			<input type="submit" id="createGroupButton" value="Create">
+		</div>
+		
+		<div id="addNumber" style="display:none">
+			<p>How many people you want to split the tab with?</p>
+			<input id="numPeople" type="number" value="" placeholder="3" />
+		</div>
+		
+		<div id="addPeople" style="display:none">
+			<div id="memberInputs">
+			</div>
+		</div>
 		
 	</section>
 	
 	
-	<section id="addTeam">
-		
-	</section>
-	
-	<section id="editInfo">
-		
-	</section>
-	
-	<div id="modalDialog">
+	<div id="modalDialogCreate">
 	    <div id="dialog" class="dialog">
-	        <div style="padding-bottom: 1em"><a href="#" class="close-dialog-button">Close</a></div>
+	        <!--<div style="padding-bottom: 1em"><a href="#" class="close-dialog-button">Close</a></div>-->
+			<div class="dialog-text-container">
+				
+			</div>
 	    </div>
 	    <div id="scrim" class="scrim"></div>
 	</div>
