@@ -68,7 +68,7 @@ function getTabOut(groupId) {
       headers = Object.keys(data);
       headers.forEach(function(header) {
         $th = $(document.createElement('th'));
-        $th.text(header);
+        $th.text('to '+header);
         $tr.append($th);
       });
 
@@ -81,13 +81,13 @@ function getTabOut(groupId) {
         var row = headers[i];
 
         $td = $(document.createElement('td'));
-        $td.text(row);
+        $td.text('from '+row);
         $tr.append($td);
 
         for(var j = 0; j < headers.length; j++) {
           var column = headers[j];
           $td = $(document.createElement('td'));
-          $td.text(data[row][column]);
+          $td.text(data[row][column].toFixed());
           $tr.append($td);
         }
       }
