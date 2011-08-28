@@ -68,6 +68,7 @@ var app = module.exports = express.createServer(
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
+  app.set('view options', {layout: false});
 });
 
 app.configure('development', function(){
@@ -90,7 +91,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/login', function(req, res) {
-  res.render('login', {layout: false});
+  res.render('login');
 });
 
 process.on('uncaughtException', function(err) {
