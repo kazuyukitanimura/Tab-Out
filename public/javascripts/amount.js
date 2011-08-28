@@ -8,7 +8,7 @@ function getUsers(groupId) {
     success: function( data ) {
       data.users.forEach(function(user) {
         $label = $(document.createElement('label'));
-        $label.text(user.name);
+        $label.text(user.name+' ('+user.id+')');
         $('#groupUsers').append($label);
 
         $input = $(document.createElement('input'));
@@ -34,8 +34,6 @@ function getUsers(groupId) {
 }
 
 function updateAmount(groupId, userId, userName, userAmount) {
-  console.log('%s %s %s %s', groupId, userId, userName, userAmount);
-
   $.ajax({
     url: '/groups/'+groupId+'/users/update',
     data: 'user_id='+userId+'&amount='+userAmount,
@@ -57,23 +55,29 @@ function getTabOut(groupId) {
       $table.attr('id', 'taboutTable');
       $('#tabout').append($table);
 
-      $tr = $(document.createElement('tr'));
-      $table.append($tr);
+      $thead = $(document.createElement('thead'));
+      $table.append($thead);
 
-      $td = $(document.createElement('td'));
-      $td.text('');
-      $tr.append($td);
+      $tr = $(document.createElement('tr'));
+      $thead.append($tr);
+
+      $th = $(document.createElement('th'));
+      $th.text('');
+      $tr.append($th);
 
       headers = Object.keys(data);
       headers.forEach(function(header) {
-        $td = $(document.createElement('td'));
-        $td.text(header);
-        $tr.append($td);
+        $th = $(document.createElement('th'));
+        $th.text(header);
+        $tr.append($th);
       });
+
+      $tbody = $(document.createElement('tbody'));
+      $table.append($tbody);
 
       for(var i = 0; i < headers.length; i++) {
         $tr = $(document.createElement('tr'));
-        $table.append($tr);
+        $tbody.append($tr);
         var row = headers[i];
 
         $td = $(document.createElement('td'));

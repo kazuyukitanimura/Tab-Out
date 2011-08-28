@@ -246,7 +246,6 @@ app.get('/groups/update', checkAuthenticated, function(req, res) {
 });
 
 app.get('/groups/:group_id', checkAuthenticated, function(req, res) {
-  console.log('aaaaa');
   /*
   Group.findById(req.params.group_id, function(err, doc) {
     res.json(doc, 200);i
