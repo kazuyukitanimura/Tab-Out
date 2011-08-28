@@ -6,6 +6,7 @@
 	$('#tabGroup').load(groupUrl);
 
     $.getJSON(groupUrl, function(r) {
+
 		for (var i=0; i<r.length; i++) {
 			var id = r[i]._id;
 			var name = r[i].name;
