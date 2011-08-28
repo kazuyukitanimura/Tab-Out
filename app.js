@@ -18,11 +18,12 @@ everyauth.debug = true;
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema
   , ObjectId = mongoose.SchemaTypes.ObjectId;
+var mongooseAuth = require('mongoose-auth');
+var Troupe = require('./lib/Troupe');
+var User = require('./lib/User');
 
 var UserSchema = new Schema({})
   , AuthUser;
-
-var mongooseAuth = require('mongoose-auth');
 
 UserSchema.plugin(mongooseAuth, {
   everymodule: {
@@ -57,10 +58,7 @@ var GroupSchema = new Schema({
 mongoose.model('Group', GroupSchema);
 var Group = mongoose.model('Group');
 
-var Troupe = require('./lib/Troupe');
-var User = require('./lib/User');
-
-var log = new Log(Log.DEBUG, fs.createWriteStream('./logs/log.log'));
+var log = new Log(Log.DEBUG, fs.createWriteStream('./log/log.log'));
 var app = module.exports = express.createServer(
   express.bodyParser(),
   express.static(__dirname + '/public'),
@@ -174,6 +172,8 @@ app.get('/', checkAuthenticated, function(req, res){
     }
   });
   */
+
+  log.debug('yo');
 
   res.render('index');
 });
