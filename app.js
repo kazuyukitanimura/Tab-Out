@@ -177,9 +177,6 @@ app.get('/', checkAuthenticated, function(req, res){
   });
   */
 
-  var url = RandomURLString(10);
-  console.log('url: %s', url);
-
   res.render('index');
 });
 
