@@ -13,5 +13,6 @@ module.exports = {
   },
   mongodb: {
     url: 'mongodb://tabout:tabout@staff.mongohq.com:10036/tabout'
+    //url: 'mongodb://localhost/tabout'
   }
 };

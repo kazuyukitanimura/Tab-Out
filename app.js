@@ -21,6 +21,7 @@ var mongoose = require('mongoose')
 var mongooseAuth = require('mongoose-auth');
 var Troupe = require('./lib/Troupe');
 var User = require('./lib/User');
+var RandomURLString = require('./lib/RandomURLString');
 
 var UserSchema = new Schema({})
   , AuthUser;
@@ -53,6 +54,7 @@ var GroupUserSchema = new Schema({
 });
 var GroupSchema = new Schema({
   name:  { type: String },
+  url: {type: String},
   users: [GroupUserSchema]
 });
 mongoose.model('Group', GroupSchema);
@@ -175,7 +177,8 @@ app.get('/', checkAuthenticated, function(req, res){
   });
   */
 
-  log.debug('yo');
+  var url = RandomURLString(10);
+  console.log('url: %s', url);
 
   res.render('index');
 });
@@ -199,7 +202,14 @@ app.get('/groups/create', checkAuthenticated, function(req, res) {
       if (err) {
         res.json({}, 400);
       } else {
-        res.json(group, 200);
+        group.url = 'http://'+config.server.host+'/groups/'+group._id;
+        group.save(function(err) {
+          if (err) {
+            res.json({}, 400);
+          } else {
+            res.json(group, 200);
+          }
+        });
       }
     });
   } else {
