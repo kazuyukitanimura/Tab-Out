@@ -83,7 +83,7 @@ app.configure('production', function(){
 app.get('/', function(req, res){
   console.log(req.loggedIn);
   if (req.loggedIn) {
-    res.render('hello ' + req.user.twit.name);
+    res.send('hello ' + req.user.twit.name);
   } else {
     res.redirect('/login');
   }
