@@ -103,8 +103,6 @@ function checkAuthenticated(req, res, next) {
       next();
     }
   } else {
-    console.log(req);
-
     req.session.url = req.url;
     res.redirect('/login');
   }
