@@ -7,6 +7,7 @@ var nko = require('nko')('jhAZ+nTFXbf2PrWJ');
 var fs = require('fs');
 var config = require('./config');
 var Log = require('log');
+var log = new Log(Log.DEBUG, fs.createWriteStream('./log/log.log'));
 var express = require('express');
 var RedisStore = require('connect-redis')(express);
 var redis = require('redis');
@@ -58,11 +59,16 @@ mongoose.model('Group', GroupSchema);
 var Group = mongoose.model('Group');
 
 var log = new Log(Log.DEBUG, fs.createWriteStream('./log/log.log'));
+
+var sessionConfig = {secret: config.session.secret};
+if (process.env.NODE_ENV === 'production') {
+  sessionConfig['store'] = new RedisStore;
+}
 var app = module.exports = express.createServer(
   express.bodyParser(),
   express.static(__dirname + '/public'),
   express.cookieParser(),
-  express.session({secret: config.session.secret}),
+  express.session(sessionConfig),
   //express.session({secret: config.session.secret, store: new RedisStore}),
   mongooseAuth.middleware(),
   express.compiler({ src: __dirname + '/public', enable: ['less'] }),
