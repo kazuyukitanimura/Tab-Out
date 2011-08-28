@@ -34,7 +34,7 @@ UserSchema.plugin(mongooseAuth, {
   }
 , twitter: {
     everyauth: {
-      myHostname: 'http://69.164.214.192'
+      myHostname: 'http://' + config.server.host
       , consumerKey: config.auth.twitter.consumerKey
       , consumerSecret: config.auth.twitter.consumerSecret
       , redirectPath: '/'
@@ -42,7 +42,7 @@ UserSchema.plugin(mongooseAuth, {
   }
 });
 mongoose.model('AuthUser', UserSchema);
-mongoose.connect('mongodb://localhost/tabout');
+mongoose.connect(config.mongodb.url);
 AuthUser = mongoose.model('AuthUser');
 
 var Troupe = require('./lib/Troupe');
@@ -76,10 +76,6 @@ app.configure('development', function(){
 
 app.configure('production', function(){
   app.use(express.errorHandler()); 
-});
-
-userDB.on('error', function (err) {
-  console.log('Redis connection error to ' + userDB.host + ':' + userDB.port + ' - ' + err);
 });
 
 // Routes
