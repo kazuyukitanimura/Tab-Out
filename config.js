@@ -1,6 +1,9 @@
 module.exports = {
   server: {
-    host: 'asuka.nko2.nodeknockout.com'
+    host: 'asuka.nko2.nodeknockout.com',
+  },
+  session: {
+    secret: 'taboutmotherfucker'
   },
   auth: {
     twitter: {

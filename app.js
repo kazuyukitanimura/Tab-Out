@@ -53,7 +53,7 @@ var app = module.exports = express.createServer(
   express.bodyParser(),
   express.static(__dirname + '/public'),
   express.cookieParser(),
-  express.session({ secret: 'test'}),
+  express.session({ secret: config.session.secret}),
   //express.session({secret: 'himitsu!', fingerprint: function(req){return req.socket.remoteAddress;}, store: sessionStore, key: 'express.sid'}),
   mongooseAuth.middleware(),
   //express.router(routes),
@@ -67,7 +67,7 @@ var app = module.exports = express.createServer(
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
+  app.set('view engine', 'ejs');
 });
 
 app.configure('development', function(){
@@ -81,7 +81,16 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', function(req, res){
-  res.render('atsuya_test', {layout: false});
+  console.log(req.loggedIn);
+  if (req.loggedIn) {
+    res.render('hello ' + req.user.twit.name);
+  } else {
+    res.redirect('/login');
+  }
+});
+
+app.get('/login', function(req, res) {
+  res.render('login', {layout: false});
 });
 
 process.on('uncaughtException', function(err) {
