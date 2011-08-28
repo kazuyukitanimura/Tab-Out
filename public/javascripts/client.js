@@ -44,6 +44,11 @@ $(function(){
   socket.on('fail', function(data){
     console.log(data);
   });
+
+  socket.on('success', function(data){
+    console.log(data);
+    $.mobile.changePage('#index');
+  });
 });
 
 $(document).bind("mobileinit", function(){
