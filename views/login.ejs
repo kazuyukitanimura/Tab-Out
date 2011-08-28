@@ -5,7 +5,7 @@
 -->
 
 <head>
-	<title>Tab-Out</title>
+	<title>Tab-Out : Login</title>
 	<meta charset='utf-8'>
 	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
 	<script src="javascripts/scripts.js"></script>
@@ -15,36 +15,30 @@
 
 <body>
 	
-	<header>
+	<header class="login">
 	    <h1>Tab-Out</h1>
-	    <p>An easy way to share tab with your social circle</p>
+	    <p>An easy way to share tab with your social circle. <a id="about">Learn more!</a></p>
 	</header>
 
     <section id="auth" class="auth">
-		<img src="images/login-twitter.png" id="authButton">
-		
-		<div id="modalDialog">
-		    <div id="dialog" class="dialog">
-		        <a href="#" class="close-dialog-button">Close</a>
-				<iframe src="http://google.com" width="100%" height="100%">
-				  <p>Twitter Auth</p>
-				</iframe>
-		    </div>
-		    <div id="scrim" class="scrim"></div>
-		</div>
+		<!-- Login -->
+		<a href="http://69.164.214.192/auth/twitter"><img src="images/login-twitter.png" id="authButton"></a>
 	</section>
 	
-	<section id="group">
+	<div id="modalDialog">
+	    <div id="dialog" class="dialog">
+	        <div style="padding-bottom: 1em"><a href="#" class="close-dialog-button">Close</a></div>
+			<p>
+				<em>Tab-Out</em> helps you and your friends to split tab, and optimize the share.
+				blah blah blah.
+			</p>
+	    </div>
+	    <div id="scrim" class="scrim"></div>
+	</div>
+
+	<footer>
 		
-	</section>
-	
-	<section id="add">
-		
-	</section>
-	
-	<section id="edit">
-		
-	</section>
+	</footer>
 	
 </body>
 </html>
