@@ -64,7 +64,7 @@ var log = new Log(Log.DEBUG, fs.createWriteStream('./log/log.log'));
 
 var sessionConfig = {secret: config.session.secret};
 if (process.env.NODE_ENV === 'production') {
-  //sessionConfig['store'] = new RedisStore;
+  sessionConfig['store'] = new RedisStore;
 }
 var app = module.exports = express.createServer(
   express.bodyParser(),
