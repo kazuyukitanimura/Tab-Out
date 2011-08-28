@@ -38,9 +38,6 @@ UserSchema.plugin(mongooseAuth, {
       , consumerKey: config.auth.twitter.consumerKey
       , consumerSecret: config.auth.twitter.consumerSecret
       , redirectPath: '/'
-      , findOrCreateUser: function (session, accessTok, accessTokExtra, twitterUser) {
-        log.debug(twitterUser);
-      }
     }
   }
 });
