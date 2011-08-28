@@ -79,19 +79,22 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-// Routes
-
-app.get('/', function(req, res){
-  console.log(req.loggedIn);
-  if (req.loggedIn) {
-    res.render('index');
+function checkAuthenticated(req, res, next) {
+  if(req.loggedIn) {
+    next();
   } else {
     res.redirect('/login');
   }
+}
+
+// Routes
+
+app.get('/', checkAuthenticated, function(req, res){
+  res.render('index');
 });
 
 app.get('/login', function(req, res) {
-  res.render('login');
+  res.render('login', {auth_url: config.server.host});
 });
 
 process.on('uncaughtException', function(err) {
