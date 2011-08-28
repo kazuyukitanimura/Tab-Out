@@ -68,6 +68,7 @@ var app = module.exports = express.createServer(
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
+  app.set('view options', {layout: false});
 });
 
 app.configure('development', function(){
@@ -83,14 +84,14 @@ app.configure('production', function(){
 app.get('/', function(req, res){
   console.log(req.loggedIn);
   if (req.loggedIn) {
-    res.send('hello ' + req.user.twit.name);
+    res.render('index');
   } else {
     res.redirect('/login');
   }
 });
 
 app.get('/login', function(req, res) {
-  res.render('login', {layout: false});
+  res.render('login');
 });
 
 process.on('uncaughtException', function(err) {
