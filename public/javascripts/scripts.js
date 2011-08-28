@@ -6,7 +6,7 @@
 	$('#tabGroup').load(groupUrl);
 
     $.getJSON(groupUrl, function(r) {
-		for (var i=1; i<=r.length; i++) {
+		for (var i=0; i<r.length; i++) {
 			var id = r[i]._id;
 			var name = r[i].name;
 			var url = r[i].url;
@@ -43,7 +43,11 @@
 				var groupId = r._id;
 				console.log(groupId);
                	addMember(groupId);
-            }
+            },
+			error: function (e) {
+				console.log("Error creating a group!"+e);
+				$("errorMessage").html("Error. Try again.");
+			}
         });		
 
 	});
@@ -56,40 +60,42 @@
 		 }, 300);
 		
 		$("#numPeople").change(function () {	
-				var num = $("#numPeople").val();
+			var num = $("#numPeople").val();
+			
+			this.timer2 = setTimeout(function () {
 				
-				this.timer2 = setTimeout(function () {
-					
-					// reset the displayed fields
-					$('#memberInputs').empty();
-					
-					// display fields
-					for (var i=1; i<=num; i++) {
-					
-						$('#memberInputs').append('<div class="number-input"><input type="text" name="member'+i+'" placeholder="Twitter ID or Email" /><input type="submit" id="addMemberButton'+i+'" value="Add"></div>');
-					}
-					$("#addPeople").css("display","block");
+				// reset the displayed fields
+				$('#memberInputs').empty();
 				
-					$('input[id^="addMemberButton"]').click(function (e) {
-						var twitterId = $('input[name^="member"]').val();
-						var url = "/groups/"+groupId+"/users/add";
-						var data = "id="+twitterId+"&name="+twitterId+"&amount=0";
-						console.log(data);
-					
-					// add each person
-					 $.ajax({
-				            url: url,
-				            data: data,
-				            success: function () {
-				               	//$('input[id^="addMemberButton"]').val("Added!");
-								//$('input[id^="addMemberButton"]').attr("disabled", "true");
+				// display fields
+				for (var i=1; i<=num; i++) {
+				
+					$('#memberInputs').append('<div class="number-input"><input type="text" name="addMember'+i+'" placeholder="Twitter ID or Email" /> <input type="submit" id="addMember'+i+'" value="Add"></div>');
+				}
+				$("#addPeople").css("display","block");
+			
+				$('input[id^="addMemberButton"]').click(function (e) {
+					var buttonID = this.id;
+					var twitterId = $('input[name^="member"]').val();
+					var url = "/groups/"+groupId+"/users/add";
+					var data = "id="+twitterId+"&name="+twitterId+"&amount=0";
+					console.log(data);
+					console.log(buttonID.value);
+				
+				// add each person
+				 $.ajax({
+			            url: url,
+			            data: data,
+			            success: function () {
+			               	//buttonID.val("Added!");
+							//buttonID.attr("disabled", "true");
 
-								console.log("Success adding a member!");
-				            }
-				     });
-				});
+							console.log("Success adding a member!");
+			            }
+			     });
 			});
 		});
+	});
 	}
 	
 	function openDialog () {
