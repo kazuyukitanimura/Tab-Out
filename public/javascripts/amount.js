@@ -8,7 +8,7 @@ function getUsers(groupId) {
     success: function( data ) {
       data.users.forEach(function(user) {
         $label = $(document.createElement('label'));
-        $label.text(user.name);
+        $label.text(user.name+' ('+user.id+')');
         $('#groupUsers').append($label);
 
         $input = $(document.createElement('input'));
