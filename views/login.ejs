@@ -1,66 +1,60 @@
 <!DOCTYPE html>
 
 <!--
-  Tab-Out by Asuka for Node Knockout 2011
+  Tab-Out by Neo-Asuka 2011
 -->
 
 <head>
-	<title>Tab-Out : Login</title>
-	<meta charset='utf-8'>
-	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
-	<script src="/javascripts/scripts.js"></script>
-	<script>
-		myId = "";
-	</script>
-	<link href="http://fonts.googleapis.com/css?family=Bevan&subset=latin" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
+    <title>Tab-Out : Login</title>
+    <meta charset='utf-8'>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
+    <script src="/javascripts/scripts.js"></script>
+    <script>
+        myId = "";
+    </script>
+    <link href="http://fonts.googleapis.com/css?family=Bevan&subset=latin" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
 </head>
 
 <body>
-	<nav id="vote">
-  		Vote for <a href="http://nodeknockout.com/teams/asuka">Asuka</a>! <iframe src="http://nodeknockout.com/iframe/asuka?css=https://raw.github.com/gist/1176774/e336c0efd7c6d78fa1f49fda2f5e813ab747f580/vote_nko_css.css" frameborder="0" scrolling="no" allowtransparency="true" width="115" height="25"></iframe> 
-	</nav>
-	
-	<header class="login">
-	    <h1>Tab-Out</h1>
-	    <p>An easy way to share tab with your social circle. <a id="about" href="#">Learn more!</a></p>
-	</header>
+    <header class="login">
+        <h1>Tab-Out</h1>
+        <p>An easy way to share tab with your social circle. <a id="about" href="#">Learn more!</a></p>
+    </header>
 
     <section id="auth" class="auth">
-		<!-- Login -->
-		<a href="http://<%= auth_url %>/auth/twitter"><img src="images/login-twitter.png" id="authButton"></a>
-	</section>
+        <!-- Login -->
+        <a href="http://<%= auth_url %>/auth/twitter"><img src="images/login-twitter.png" id="authButton"></a>
+    </section>
 	
-	<div id="modalDialog">
-	    <div id="dialog" class="dialog">
-	        <div class="dialog-header"><a href="#" class="close-dialog-button">Close</a></div>
-			<div class="dialog-text-container">
-				<p><em>Tab-Out</em> helps you and your friends to split tab, and optimize the share  with your social circle. </p>
-                   <p>Suppose a group of 4 people went on a day trip, and say A spent $74 for Dinner, B spent $51 for Lunch, C spent $43 for Beer, D spent $64 for Gas. Who owes who for how much such? </p>
-	               <p>The naive answer for this question is split the each bill by the number of people.</p>
-               
-	               A owes A $0, B $12.75, C $10.75, D $16<br />
-	               B owes A $18.5, B $0, C $10.75, D $16<br />
-	               C owes A $18.5, B $12.75, C $0, D $16<br />
-	               D owes A $18.5, B $12.75, C $10.75, D $0<br />
-               
-	               <p>Tab-Out allows you to log bills, balance out, and minimize the the number of transactions in a group.</p>
-	               <p>The <em>Tab-Out</em> answer fot the day trip example is</p>
-               
-	               A owes A $0, B $0, C $0, D $0<br />
-	               B owes A $1, B $0, C $0, D $6<br />
-	               C owes A $15, B $0, C $0, D $0<br />
-	               D owes A $0, B $0, C $0, D $0<br />
-               
-	               <p>Connect your friends, lunch mates, colleagues on <em>Tab-Out</em></p>
-			</div>
-	    </div>
-	    <div id="scrim" class="scrim"></div>
-	</div>
+    <div id="modalDialog">
+        <div id="dialog" class="dialog">
+            <div class="dialog-header"><a href="#" class="close-dialog-button">Close</a></div>
+                <div class="dialog-text-container">
+                    <p><em>Tab-Out</em> helps you and your friends to split tab, and optimize the share  with your social circle. </p>
+                    <p>Suppose a group of 4 people went on a day trip, and say A spent $74 for Dinner, B spent $51 for Lunch, C spent $43 for Beer, D spent $64 for Gas. Who owes who for how much such? </p>
+                    <p>The naive answer for this question is split the each bill by the number of people.</p>
 
-	<footer>
-		
-	</footer>
-	
+                    A owes A $0, B $12.75, C $10.75, D $16<br />
+                    B owes A $18.5, B $0, C $10.75, D $16<br />
+                    C owes A $18.5, B $12.75, C $0, D $16<br />
+                    D owes A $18.5, B $12.75, C $10.75, D $0<br />
+
+                    <p>Tab-Out allows you to log bills, balance out, and minimize the the number of transactions in a group.</p>
+                    <p>The <em>Tab-Out</em> answer fot the day trip example is</p>
+
+                    A owes A $0, B $0, C $0, D $0<br />
+                    B owes A $1, B $0, C $0, D $6<br />
+                    C owes A $15, B $0, C $0, D $0<br />
+                    D owes A $0, B $0, C $0, D $0<br />
+
+                    <p>Connect your friends, lunch mates, colleagues on <em>Tab-Out</em></p>
+                </div>
+            </div>
+        <div id="scrim" class="scrim"></div>
+    </div>
+
+    <footer>
+    </footer>
 </body>
 </html>

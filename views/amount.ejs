@@ -1,47 +1,46 @@
 <!DOCTYPE html>
 
 <!--
-  Tab-Out by Asuka for Node Knockout 2011
+  Tab-Out by Neo-Asuka 2011
 -->
 
 <head>
-	<title>Tab-Out</title>
-	<meta charset='utf-8'>
-	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
-	<!--<script src="/javascripts/scripts.js"></script>-->
-  <script src="/javascripts/amount.js"></script>
-	<link href="http://fonts.googleapis.com/css?family=Bevan&subset=latin" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
-  <link rel="stylesheet" href="/stylesheets/amount.css" type="text/css">
-  <script>
-    var groupId = '<%= group_id %>';
-  </script>
+    <title>Tab-Out</title>
+    <meta charset='utf-8'>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
+    <!--<script src="/javascripts/scripts.js"></script>-->
+    <script src="/javascripts/amount.js"></script>
+    <link href="http://fonts.googleapis.com/css?family=Bevan&subset=latin" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
+    <link rel="stylesheet" href="/stylesheets/amount.css" type="text/css">
+    <script>
+        var groupId = '<%= group_id %>';
+    </script>
 </head>
 
 <body>
-  <iframe src="http://nodeknockout.com/iframe/asuka?css=https://raw.github.com/gist/1176774/e336c0efd7c6d78fa1f49fda2f5e813ab747f580/vote_nko_css.css" frameborder="0" scrolling="no" allowtransparency="true" width="115" height="25"></iframe>
 
-	<header class="main">
-	    <h2><a href="/">Tab-Out</a></h2>
-      <div class="username">Hello, <%= everyauth.user.twit.name %>! <img src="<%= everyauth.user.twit.profileImageUrl %>"/></div>
-	</header>
+    <header class="main">
+        <h2><a href="/">Tab-Out</a></h2>
+        <div class="username">Hello, <%= everyauth.user.twit.name %>! <img src="<%= everyauth.user.twit.profileImageUrl %>"/></div>
+    </header>
 
     <section id="yourGroup">
-		<h3>Enter How Much Does Each of You Paid</h3>
+        <h3>Enter How Much Does Each of You Paid</h3>
 	
-    <div id="groupUsers">
-    </div>
+        <div id="groupUsers">
+        </div>
     </section>
-    <section id="yourGroup">
-    <h3>This is How You Should Pay!</h3>
 
-    <div id="tabout">
-    </div>
+    <section id="yourGroup">
+        <h3>This is How You Should Pay!</h3>
+
+        <div id="tabout">
+        </div>
 		
-	</section>
+    </section>
 	
-	<footer>
-		
-	</footer>
+    <footer>
+    </footer>
 </body>
 </html>

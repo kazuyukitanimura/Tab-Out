@@ -1,82 +1,76 @@
 <!DOCTYPE html>
 
 <!--
-  Tab-Out by Asuka for Node Knockout 2011
+  Tab-Out by Neo-Asuka 2011
 -->
 
 <head>
-	<title>Tab-Out</title>
-	<meta charset='utf-8'>
-	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
-	<script>
-		myId = "<%= everyauth.user.twit.screenName %>";
-	</script>
-	<script src="/javascripts/scripts.js"></script>
-	<link href="http://fonts.googleapis.com/css?family=Bevan&subset=latin" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
+    <title>Tab-Out</title>
+    <meta charset='utf-8'>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
+    <script>
+        myId = "<%= everyauth.user.twit.screenName %>";
+    </script>
+    <script src="/javascripts/scripts.js"></script>
+    <link href="http://fonts.googleapis.com/css?family=Bevan&subset=latin" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
 </head>
 
 <body>
-	<nav id="vote">
-  		Vote for <a href="http://nodeknockout.com/teams/asuka">Asuka</a>! <iframe src="http://nodeknockout.com/iframe/asuka?css=https://raw.github.com/gist/1176774/e336c0efd7c6d78fa1f49fda2f5e813ab747f580/vote_nko_css.css" frameborder="0" scrolling="no" allowtransparency="true" width="115" height="25"></iframe> 
-	</nav>
-	
-	<header class="main">
-	    <h2><a href="/">Tab-Out</a></h2>
-      <div class="username">Hello, <%= everyauth.user.twit.name %>! <img src="<%= everyauth.user.twit.profileImageUrl %>"/></div>
-	</header>
+    <header class="main">
+        <h2><a href="/">Tab-Out</a></h2>
+        <div class="username">Hello, <%= everyauth.user.twit.name %>! <img src="<%= everyauth.user.twit.profileImageUrl %>"/></div>
+    </header>
 
     <section id="yourGroup">
-		<h3>Your Group</h3>
+        <h3>Your Group</h3>
 		
-		<div id="groups">
+        <div id="groups">
 
-			<ol id="tabGroupList" class="tab-group">
-				<!-- generated group list here. -->
-			</ol>
+            <ol id="tabGroupList" class="tab-group">
+                <!-- generated group list here. -->
+            </ol>
 			
-		</div>
+        </div>
 		
-	</section>
+    </section>
 	
-	<section id="createGroup">
-		<h3>Create a new group</h3>
+    <section id="createGroup">
+        <h3>Create a new group</h3>
+
+        <div id="createGroupname">
+            <form action="#"> 
+                <label for="name">Group Name:</label>
+                <input id="groupname" type="text" name="groupname" value="" placeholder="Road Trip" /> 
+                <input type="button" id="createGroupButton" value="Create Name">
+                <div id="errorMessage"></div>
+            </form>
+        </div>
+
+        <div id="addNumber" style="display:none">
+            <p>How many people you want to split the tab with?</p>
+            <input id="numPeople" type="number" min="0" value="" placeholder="3" />
+        </div>
+
+        <div id="addPeople" style="display:none">
+            <div id="memberInputs">
+            </div>
+            <input type="button" id="finalizeGroupButton" value="Go To The Group">
+        </div>
 		
-		<div id="createGroupname">
-			<form action="#"> 
-				<label for="name">Group Name:</label>
-				<input id="groupname" type="text" name="groupname" value="" placeholder="Road Trip" /> 
-				<input type="button" id="createGroupButton" value="Create Name">
-				<div id="errorMessage"></id>
-			</form>
-		</div>
-		
-		<div id="addNumber" style="display:none">
-			<p>How many people you want to split the tab with?</p>
-			<input id="numPeople" type="number" min="0" value="" placeholder="3" />
-		</div>
-		
-		<div id="addPeople" style="display:none">
-			<div id="memberInputs">
-			</div>
-			<input type="button" id="finalizeGroupButton" value="Go To The Group">
-		</div>
-		
-	</section>
+    </section>
 	
-	
-	<div id="modalDialogCreate">
-	    <div id="dialog" class="dialog">
-	        <!--<div style="padding-bottom: 1em"><a href="#" class="close-dialog-button">Close</a></div>-->
-			<div class="dialog-text-container">
+    <div id="modalDialogCreate">
+        <div id="dialog" class="dialog">
+            <!--<div style="padding-bottom: 1em"><a href="#" class="close-dialog-button">Close</a></div>-->
+            <div class="dialog-text-container">
 				
-			</div>
-	    </div>
-	    <div id="scrim" class="scrim"></div>
-	</div>
+            </div>
+        </div>
+        <div id="scrim" class="scrim"></div>
+    </div>
 	
-	<footer>
-		
-	</footer>
+    <footer>
+    </footer>
 </body>
 </html>
