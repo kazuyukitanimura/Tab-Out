@@ -1,7 +1,6 @@
 module.exports = {
   server: {
-    //host: 'asuka.nko2.nodeknockout.com',
-    host: 'localhost',
+    host: 'asuka.nko2.nodeknockout.com',
   },
   session: {
     secret: 'taboutmotherfucker'
