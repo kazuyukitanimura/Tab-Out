@@ -2,7 +2,6 @@
 /**
  * Module dependencies.
  */
-var nko = require('nko')('jhAZ+nTFXbf2PrWJ');
 
 var fs = require('fs');
 var config = require('./config');
@@ -113,70 +112,6 @@ function checkAuthenticated(req, res, next) {
 // Routes
 
 app.get('/', checkAuthenticated, function(req, res){
-  /*
-  Group.findById("4e59ba1c2605b4d12c000003", function(err, result) {
-    console.log(result.name);
-    result.users.forEach(function(user) {
-      console.log(user.name);
-    });
-  });
-  */
-
-  /*
-  console.log('here i come!');
-  Group.findOne({users: {$elemMatch : {name: "Unko"}}}, function(err, doc) {
-    if (err) {
-      console.log(err);
-    }
-    console.log(doc);
-  });
-  */
-  /*
-  var group = new Group();
-  group.name = 'Group1';
-  group.users = [
-    {
-      id: '135591363',
-      name: 'Kazu',
-      amount: 10
-    },
-    {
-      id: '7103272',
-      name: 'Tomomi',
-      amount: 20
-    }
-  ];
-  group.save(function(err) {
-    if (err) {
-      console.log(err);
-    }
-  });
-  */
-  /*
-  var group = new Group();
-  group.name = 'Group2';
-  group.users = [
-    {
-      id: '135591363',
-      name: 'Kazu',
-      amount: 40
-    },
-    {
-      name: 'Unko',
-      amount: 200
-    },
-    {
-      name: 'Shikko',
-      amount: 198
-    }
-  ];
-  group.save(function(err) {
-    if (err) {
-      console.log(err);
-    }
-  });
-  */
-
   res.render('index');
 });
 
@@ -246,11 +181,6 @@ app.get('/groups/update', checkAuthenticated, function(req, res) {
 });
 
 app.get('/groups/:group_id', checkAuthenticated, function(req, res) {
-  /*
-  Group.findById(req.params.group_id, function(err, doc) {
-    res.json(doc, 200);i
-  });
-  */
   res.render('amount', {group_id: req.params.group_id});
 });
 
@@ -382,22 +312,8 @@ app.get('/groups/:group_id/tabout', checkAuthenticated, function(req, res) {
         console.log('user: %s, expense: %d', users[i].username, expenses[i]);
       }
 
-      /*
-      var A = new User({username:'A', user_id:0});
-      var B = new User({username:'B', user_id:1});
-      var C = new User({username:'C', user_id:2});
-      var D = new User({username:'D', user_id:3});
-      var users = [A, B, C, D];
-      */
-
       var numPpl = users.length;
       var total = 0;
-      /*
-      var expenses = []; // index == userID
-      for(var i=numPpl; i--;){
-        expenses.push(Math.ceil(Math.random()*100)*100); // between $0 and $100
-      }
-      */
       for(var i=numPpl; i--;){
         total += expenses[i];
       }
