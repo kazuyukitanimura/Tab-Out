@@ -92,7 +92,7 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-function checkAuthenticated(req, res, next) {
+var checkAuthenticated = function(req, res, next) {
   if(req.loggedIn) {
     if (req.session.url) {
       console.log('redirecting to %s', req.session.url);
@@ -107,11 +107,15 @@ function checkAuthenticated(req, res, next) {
     req.session.url = req.url;
     res.redirect('/login');
   }
-}
+};
 
 // Routes
 
 app.get('/', checkAuthenticated, function(req, res){
+  res.render('index');
+});
+
+app.get('/guest', function(req, res){
   res.render('index');
 });
 
