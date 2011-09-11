@@ -98,11 +98,14 @@ var checkAuthenticated = function(req, res, next) {
       console.log('redirecting to %s', req.session.url);
       redirectUrl = req.session.url;
       delete req.session.url;
+      delete req.session.guest;
 
       res.redirect(redirectUrl);
     } else {
       next();
     }
+  } else if(req.session.guest) {
+    next();
   } else {
     req.session.url = req.url;
     res.redirect('/login');
@@ -116,6 +119,7 @@ app.get('/', checkAuthenticated, function(req, res){
 });
 
 app.get('/guest', function(req, res){
+  req.session.guest = true;
   res.render('index', {guestID: RandomURLString(6)});
 });
 
