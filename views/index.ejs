@@ -9,7 +9,7 @@
     <meta charset='utf-8'>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
     <script>
-        myId = "<%= everyauth.user.twit.screenName %>";
+        myId = '<%- everyauth.user ? everyauth.user.twit.screenName : guestID %>';
     </script>
     <script src="/javascripts/scripts.js"></script>
     <link href="http://fonts.googleapis.com/css?family=Bevan&subset=latin" rel="stylesheet" type="text/css">
@@ -19,7 +19,7 @@
 <body>
     <header class="main">
         <h2><a href="/">Tab-Out</a></h2>
-        <div class="username">Hello, <%= everyauth.user.twit.name %>! <img src="<%= everyauth.user.twit.profileImageUrl %>"/></div>
+        <div class="username">Hello, <%- everyauth.user ? everyauth.user.twit.name : 'Guest' %>! <img src="<%- everyauth.user ? everyauth.user.twit.profileImageUrl : 'http://a1.twimg.com/profile_images/589455865/asuka-icon_bigger.jpg' %>"/></div>
     </header>
 
     <section id="yourGroup">
@@ -42,13 +42,13 @@
             <form action="#"> 
                 <label for="name">Group Name:</label>
                 <input id="groupname" type="text" name="groupname" value="" placeholder="Road Trip" /> 
-                <input type="button" id="createGroupButton" value="Create Name">
+                <input type="button" id="createGroupButton" value="Create!">
                 <div id="errorMessage"></div>
             </form>
         </div>
 
         <div id="addNumber" style="display:none">
-            <p>How many people you want to split the tab with?</p>
+            <p>How many people in the group?</p>
             <input id="numPeople" type="number" min="0" value="" placeholder="3" />
         </div>
 

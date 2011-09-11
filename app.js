@@ -116,7 +116,7 @@ app.get('/', checkAuthenticated, function(req, res){
 });
 
 app.get('/guest', function(req, res){
-  res.render('index');
+  res.render('index', {guestID: RandomURLString(6)});
 });
 
 app.get('/login', function(req, res) {
