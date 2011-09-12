@@ -21,18 +21,29 @@ function getUsers(groupId) {
         input.val(user.amount);
         $('#groupUsers').append(input);
 
-        var updateButton = $(document.createElement('button'));
-        updateButton.text('Update');
-        updateButton.click(function() {
+        input.keyup(function(e){
           var amount = $('#'+inputId).val();
-          updateAmount(groupId, user._id, user.name, amount);
+          if(isNumber(amount)){
+            updateAmount(groupId, user._id, user.name, amount);
+          }
         });
-        $('#groupUsers').append(updateButton);
+
+        //var updateButton = $(document.createElement('button'));
+        //updateButton.text('Update');
+        //updateButton.click(function() {
+        //  var amount = $('#'+inputId).val();
+        //  updateAmount(groupId, user._id, user.name, amount);
+        //});
+        //$('#groupUsers').append(updateButton);
       });
 
       getTabOut(groupId);
     }
   });
+}
+
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function updateAmount(groupId, userId, userName, userAmount) {

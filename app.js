@@ -120,7 +120,7 @@ app.get('/', checkAuthenticated, function(req, res){
 
 app.get('/guest', function(req, res){
   req.session.guest = true;
-  res.render('index', {guestID: RandomURLString(6)});
+  res.render('index', {guestID: 'Guest_'+RandomURLString(6)});
 });
 
 app.get('/login', function(req, res) {
