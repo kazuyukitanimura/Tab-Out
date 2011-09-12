@@ -24,7 +24,8 @@ function getUsers(groupId) {
         input.keyup(function(e){
           var amount = $('#'+inputId).val();
           if(isNumber(amount)){
-            updateAmount(groupId, user._id, user.name, amount);
+            amount *= 100;
+            updateAmount(groupId, user._id, user.name, amount.toFixed());
           }
         });
 
@@ -100,7 +101,7 @@ function getTabOut(groupId) {
         for(var j = 0; j < headers.length; j++) {
           var column = headers[j];
           var td = $(document.createElement('td'));
-          td.text('$'+data[row][column].toFixed());
+          td.text('$'+data[row][column].toFixed()/100);
           tr.append(td);
         }
       }
