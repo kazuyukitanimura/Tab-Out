@@ -1,10 +1,15 @@
+html {
+	background: #313131 url(../images/bkgd.png) repeat 0 0;
+	height: 100%;
+}
 body {
 	margin: 0;
 	padding: 0;
+	height: 100%;
 	font-family: 'Helvetica Neue', Helvetica, arial, sans-serif;
 	font-size: 18px;	
 	color: #fff;
-	background-color: #222;
+	background-color: transparent;
 	background-image: -webkit-gradient(radial,
                             50% 0, 10,
                             50% 0, 400,
@@ -52,7 +57,8 @@ header h2 {
   	font-family: 'Bevan', sans-serif;
 	font-weight: bold;
 	text-shadow: rgba(255,255,255, .7) 0px 0px .2em;
-	margin: .5em auto 0;
+	margin: 0 auto;
+	padding-top: .5em;
 }
 header h1 {
 	font-size: 6em;

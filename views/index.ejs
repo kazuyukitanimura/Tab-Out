@@ -13,13 +13,16 @@
     </script>
     <script src="/javascripts/scripts.js"></script>
     <link href="http://fonts.googleapis.com/css?family=Bevan&subset=latin" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/reset.css" type="text/css">	
     <link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
 </head>
 
 <body>
     <header class="main">
-        <h2><a href="/">Tab-Out</a></h2>
-        <div class="username">Hello, <%- everyauth.user ? everyauth.user.twit.name : 'Guest' %>! <img src="<%- everyauth.user ? everyauth.user.twit.profileImageUrl : 'http://a1.twimg.com/profile_images/589455865/asuka-icon_bigger.jpg' %>"/></div>
+		<hgroup>
+        	<h2><a href="/">Tab-Out</a></h2>
+        	<p class="username">Hello, <%- everyauth.user ? everyauth.user.twit.name : 'Guest' %>! <img src="<%- everyauth.user ? everyauth.user.twit.profileImageUrl : 'http://a1.twimg.com/profile_images/589455865/asuka-icon_bigger.jpg' %>"/></p>
+		</hgroup>
     </header>
 
     <section id="yourGroup">
