@@ -72,8 +72,7 @@ $(function() {
         //setTimeout(function () {
             $('#addNumber').show().find(numPeople).focus();
         //}, 300);
-
-        //numPeople.change(function () {	
+	
 		numPeople[0].addEventListener('input', function() {
             var num = numPeople.val();
 			
@@ -131,7 +130,7 @@ $(function() {
                     });
                 });
             });
-	});
+		}, false);
     }
 
     function openDialog () {
